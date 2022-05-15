@@ -2,11 +2,11 @@
 
 This module simulates Darwinian Evolution in order to train neural networks in various tasks.
 
-## Model parameters:
+## Model parameters
 
 ### Train function
--> function that takes in one parameter - a feed function (will be provided by the module)
--> feed function takes in the input layer, returns output layer activations
+-> function that takes in one parameter - a feed function (will be provided by the module)  
+-> feed function takes in the input layer, returns output layer activations  
 -> train function should return a score (a value representing how well it did, the more, the better)
 
 ### Net sizes
@@ -24,7 +24,10 @@ This module simulates Darwinian Evolution in order to train neural networks in v
 ### Mutation limit
 -> maximal change in the neuron in a single mutation
 
+### Multithreading
+-> to run the module in multiple threads set this parameter to true  
+-> you also have to set `JULIA_NUM_THREADS` environmental variable to the desired amount
 
 
-#### Future
+## Future
 -> Add saving to file
