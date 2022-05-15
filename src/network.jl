@@ -1,7 +1,4 @@
 
-# println("Loading Distributions.jl...")
-# using Distributions
-
 struct Network
     num_of_layers
     sizes

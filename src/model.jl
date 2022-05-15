@@ -2,6 +2,9 @@ module Model
 
     include("./network.jl")
 
+    using Base.Threads
+    import Base.Threads.@threads
+
     mutable struct MODEL
         NET_SIZES
         AGENTS_PER_GEN
@@ -9,11 +12,12 @@ module Model
         MUTATION_CHANCE
         MUTATION_LIMIT
         TRAIN_FUNCTION
+        MULTITHREAD
         CURRENT_GENERATION
         CURRENT_BEST
     end
 
-    MODEL() = MODEL(nothing, nothing, nothing, nothing, nothing, nothing, nothing, nothing)
+    MODEL() = MODEL(nothing, nothing, nothing, nothing, nothing, nothing, nothing, nothing, nothing)
 
     const STATE = Ref{MODEL}()
 
@@ -24,6 +28,7 @@ module Model
         top_percent::Float64 = 0.15,
         mutation_chance::Float64 = 0.05,
         mutation_limit::Float64 = 0.1,
+        multithread::Bool = true
     )
         STATE[] = MODEL(
             net_sizes,
@@ -32,6 +37,7 @@ module Model
             mutation_chance,
             mutation_limit,
             train_function,
+            multithread,
             nothing,
             nothing
         )
@@ -43,16 +49,19 @@ module Model
             STATE[].CURRENT_GENERATION = [Network(STATE[].NET_SIZES) for _ in 1:STATE[].AGENTS_PER_GEN]
         end
 
-        #println(length(STATE[].CURRENT_GENERATION), " ", STATE[].AGENTS_PER_GEN)
-        #println([STATE[].CURRENT_GENERATION[i] === STATE[].CURRENT_GENERATION[i+1] ? 1 : 0 for i in 1:(STATE[].AGENTS_PER_GEN-1)])
-
         n = length(STATE[].CURRENT_GENERATION)
         scores = [(i, -Inf) for i in 1:n]
 
-        # Multithreading
-        for i in 1:n
-            feed(input) = feedforward(STATE[].CURRENT_GENERATION[i], input)
-            scores[i] = (i, STATE[].TRAIN_FUNCTION(feed))
+        if STATE[].MULTITHREAD
+            @threads for i in 1:n
+                feed(input) = feedforward(STATE[].CURRENT_GENERATION[i], input)
+                scores[i] = (i, STATE[].TRAIN_FUNCTION(feed))
+            end
+        else
+            for i in 1:n
+                feed(input) = feedforward(STATE[].CURRENT_GENERATION[i], input)
+                scores[i] = (i, STATE[].TRAIN_FUNCTION(feed))
+            end
         end
 
         sort!(scores, by = x->x[2], rev=true)
