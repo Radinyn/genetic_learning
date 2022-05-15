@@ -29,4 +29,4 @@ This module simulates Darwinian Evolution in order to train neural networks in v
 -> you also have to set `JULIA_NUM_THREADS` environmental variable to the desired amount
 
 ## Dependencies
--> [JDL2](https://github.com/JuliaIO/JLD2.jl) for file I/O
+-> [JLD2](https://github.com/JuliaIO/JLD2.jl) for file I/O
