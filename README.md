@@ -1,2 +1,2 @@
-# genetic_learning
-Julia module for Genetic Algorithm based AI
+# Julia module for Genetic Algorithm based AI
+
