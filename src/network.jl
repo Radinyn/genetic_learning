@@ -1,3 +1,4 @@
+using JLD2
 
 struct Network
     num_of_layers
@@ -11,7 +12,6 @@ function _create_network(sizes::Array{UInt32})
 
     biases = [rand(y, 1) for y in sizes[2:n]]
     weights = [rand(sizes[i+1], sizes[i]) for i in 1:(n-1)]
-    
 
     return Network(
         n,
@@ -22,6 +22,7 @@ function _create_network(sizes::Array{UInt32})
 end
 
 Network(sizes::Array{UInt32}) = _create_network(sizes)
+Network() = Network(nothing, nothing, nothing, nothing)
 
 sigmoid(x) = 1.0/(1.0+exp(-x))
 
@@ -90,4 +91,13 @@ function mutate!(net::Network, chance::Float64, strength_limit::Float64)
             end
         end
     end
+end
+
+function write_to_file(net::Network, filepath::String)
+    @save filepath net
+end
+
+function read_from_file(filepath::String)
+    @load filepath net
+    return net
 end

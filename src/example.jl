@@ -12,18 +12,24 @@ end
 function main()
 
     sizes::Array{UInt32} = [1, 5, 5, 1]
-    GENERATIONS = 1000
+    GENERATIONS = 100
 
     Model.init(train, sizes)
+
+    net::Model.Network = Model.Network()
 
     for generation in 1:GENERATIONS
         Model.train_generation()
 
         if generation % 100 == 0
-            net::Model.Network = Model.get_best()
+            net = Model.get_best()
             println("Output: ", Model.feedforward(net, [rand()]))
         end
     end
+
+    Model.write_to_file(net, "/tmp/file")
+    net = Model.read_from_file("/tmp/file")
+    println("Output: ", Model.feedforward(net, [rand()]))
 end
 
 main()

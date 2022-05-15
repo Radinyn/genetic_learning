@@ -28,6 +28,5 @@ This module simulates Darwinian Evolution in order to train neural networks in v
 -> to run the module in multiple threads set this parameter to true  
 -> you also have to set `JULIA_NUM_THREADS` environmental variable to the desired amount
 
-
-## Future
--> Add saving to file
+## Dependencies
+-> [JDL2](https://github.com/JuliaIO/JLD2.jl) for file I/O
